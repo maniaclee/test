@@ -5,10 +5,12 @@ import com.alibaba.druid.filter.stat.StatFilter;
 import com.alibaba.druid.pool.DruidDataSource;
 import com.google.common.collect.Lists;
 import maniac.lee.shardy.config.ShardResult;
+import maniac.lee.shardy.config.ShardStrategyContext;
 import maniac.lee.shardy.config.TableConfig;
 import maniac.lee.shardy.config.builder.SlaveConfigBuilder;
 import maniac.lee.shardy.config.builder.TableConfigBuilder;
 import maniac.lee.shardy.config.strategy.BucketArrayShardStrategy;
+import maniac.lee.shardy.config.strategy.ShardStrategy;
 import maniac.lee.shardy.spring.ShardInterceptorFactoryBean;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
@@ -53,11 +55,15 @@ public class DalConfig {
                 .slaveConfigs(Lists.newArrayList(
                         SlaveConfigBuilder.instance()
                                 .setSlaveColumn("name")
-                                .setSlaveMapping(context -> {
-                                    String table = context.getTable();
-                                    if (context.getColumnValue().toString().startsWith("shard"))
-                                        table += "_0";
-                                    return new ShardResult(table, null);
+                                .setSlaveMapping(new ShardStrategy() {
+                                    @Override
+                                    public ShardResult map(ShardStrategyContext context) {
+                                        Object slaveColumn = context.getColumnValue();
+                                        String table = context.getTable();
+                                        if (slaveColumn.toString().startsWith("shard"))
+                                            table += "_0";
+                                        return new ShardResult(table, null);
+                                    }
                                 })
                                 .build()))
                 .build();
