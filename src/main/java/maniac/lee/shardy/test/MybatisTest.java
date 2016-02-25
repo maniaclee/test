@@ -8,6 +8,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.test.context.ContextConfiguration;
@@ -22,7 +24,7 @@ import java.util.Iterator;
 @SpringBootApplication
 @ComponentScan("maniac.lee.shardy")
 @RunWith(SpringJUnit4ClassRunner.class)
-@EnableAutoConfiguration
+@EnableAutoConfiguration(exclude = {DataSourceTransactionManagerAutoConfiguration.class, DataSourceAutoConfiguration.class})
 @EnableAspectJAutoProxy
 @ContextConfiguration(classes = {MybatisTest.class})
 public class MybatisTest {
@@ -57,17 +59,18 @@ public class MybatisTest {
         print(daoLayer.findByName("shard_test"));
         print(daoLayer.findByName("fuck"));
     }
+
     @Test
     public void names() {
-        print(daoLayer.findByNames(Lists.newArrayList("shard_test","fuck")));
+        print(daoLayer.findByNames(Lists.newArrayList("shard_test", "fuck", "db_shard_shit")));
     }
 
 
     @Test
     public void insert() {
         User user = new User();
-//        user.setId(10000000 + 8);
-        user.setId(59);
+        user.setId(10000000 + 12);
+//        user.setId(59);
         user.setName("test");
         System.out.println("re - > " + daoLayer.insert(user));
     }

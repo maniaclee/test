@@ -5,12 +5,11 @@ import com.alibaba.druid.filter.stat.StatFilter;
 import com.alibaba.druid.pool.DruidDataSource;
 import com.google.common.collect.Lists;
 import maniac.lee.shardy.config.ShardResult;
-import maniac.lee.shardy.config.ShardStrategyContext;
 import maniac.lee.shardy.config.TableConfig;
 import maniac.lee.shardy.config.builder.SlaveConfigBuilder;
 import maniac.lee.shardy.config.builder.TableConfigBuilder;
 import maniac.lee.shardy.config.strategy.BucketArrayShardStrategy;
-import maniac.lee.shardy.config.strategy.ShardStrategy;
+import maniac.lee.shardy.datasource.DynamicDataSource;
 import maniac.lee.shardy.spring.ShardInterceptorFactoryBean;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
@@ -19,18 +18,18 @@ import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.aop.aspectj.AspectJExpressionPointcut;
 import org.springframework.aop.support.DefaultPointcutAdvisor;
-import org.springframework.beans.factory.annotation.Autowire;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.io.Resource;
+import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-import org.springframework.transaction.support.TransactionTemplate;
 
+import javax.sql.DataSource;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
 
@@ -55,15 +54,15 @@ public class DalConfig {
                 .slaveConfigs(Lists.newArrayList(
                         SlaveConfigBuilder.instance()
                                 .setSlaveColumn("name")
-                                .setSlaveMapping(new ShardStrategy() {
-                                    @Override
-                                    public ShardResult map(ShardStrategyContext context) {
-                                        Object slaveColumn = context.getColumnValue();
-                                        String table = context.getTable();
-                                        if (slaveColumn.toString().startsWith("shard"))
-                                            table += "_0";
-                                        return new ShardResult(table, null);
+                                .setSlaveToTableMapping(context -> {
+                                    String name = context.getColumnValue().toString();
+                                    if (name.startsWith("db")) {
+                                        return ShardResult.create("User", "user_shard");
                                     }
+                                    String table = context.getTable();
+                                    if (name.startsWith("shard"))
+                                        table += "_0";
+                                    return new ShardResult(table, null);
                                 })
                                 .build()))
                 .build();
@@ -75,20 +74,42 @@ public class DalConfig {
     }
 
     @Bean
-    public SqlSessionFactoryBean sqlSessionFactory(Interceptor shardInterceptor, DruidDataSource dataSource) {
+    public SqlSessionFactoryBean sqlSessionFactory(Interceptor shardInterceptor, AbstractRoutingDataSource dynamicDataSource) {
         SqlSessionFactoryBean ssfb = new SqlSessionFactoryBean();
         ssfb.setTypeAliasesPackage("psyco.test.dal.entity");
         ssfb.setPlugins(new Interceptor[]{shardInterceptor});
-        ssfb.setDataSource(dataSource);
+        ssfb.setDataSource(dynamicDataSource);
         ssfb.setMapperLocations(resources);
         return ssfb;
     }
 
-    @Bean(initMethod = "init", destroyMethod = "close")
-    @Autowired
-    public DruidDataSource dataSource(@Value("${user.jdbc.url}") String url,
-                                      @Value("${user.jdbc.user}") String username,
-                                      @Value("${user.jdbc.password}") String password) throws SQLException {
+    @Bean(initMethod = "init", destroyMethod = "close", name = "user")
+    public DataSource user(@Value("${user.jdbc.url}") String url,
+                           @Value("${user.jdbc.user}") String username,
+                           @Value("${user.jdbc.password}") String password) throws SQLException {
+        return createDataSource(url, username, password);
+    }
+
+    @Bean(initMethod = "init", destroyMethod = "close", name = "user_shard")
+    public DataSource user_shard(@Value("${user2.jdbc.url}") String url,
+                                 @Value("${user2.jdbc.user}") String username,
+                                 @Value("${user2.jdbc.password}") String password) throws SQLException {
+        return createDataSource(url, username, password);
+    }
+
+    @Bean
+    public AbstractRoutingDataSource dynamicDataSource(DataSource user, DataSource user_shard) {
+        DynamicDataSource re = DynamicDataSource.instance("user");
+        re.setDefaultTargetDataSource(user);
+        re.setTargetDataSources(new HashMap() {{
+            put("user", user);
+            put("user_shard", user_shard);
+        }});
+        System.out.println(re);
+        return re;
+    }
+
+    DruidDataSource createDataSource(String url, String username, String password) throws SQLException {
         DruidDataSource druidDataSource = new DruidDataSource();
         druidDataSource.setUrl(url);
         druidDataSource.setUsername(username);
@@ -120,11 +141,6 @@ public class DalConfig {
         druidDataSource.setProxyFilters(filterList);
 
         return druidDataSource;
-    }
-
-    @Bean(autowire = Autowire.BY_NAME)
-    public TransactionTemplate transactionTemplate() {
-        return new TransactionTemplate();
     }
 
     //    @Bean
