@@ -1,5 +1,6 @@
 package maniac.lee.shardy.test.dal.mapper;
 
+import maniac.lee.shardy.datasource.DbRouter;
 import maniac.lee.shardy.test.dal.entity.User;
 import org.apache.ibatis.annotations.*;
 
@@ -11,9 +12,14 @@ import java.util.List;
 public interface DaoLayer {
 
     @Select("select * from User where id < #{idVar}")
+    @DbRouter(useTable = "User")
+        //force using table User
     List<User> find(@Param("idVar") long id);
 
     List<User> findByIds(@Param("ids") List<Long> ids, @Param("role") String role);
+
+    @DbRouter("user_shard")
+    List<User> findByIdsDbShard(@Param("ids") List<Long> ids, @Param("role") String role);
 
     @Insert("insert into   User(id,name) values(#{id},#{name})")
     @SelectKey(statement = "select #{id}", keyProperty = "", before = false, resultType = long.class)

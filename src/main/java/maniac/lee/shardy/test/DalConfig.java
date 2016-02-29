@@ -3,20 +3,19 @@ package maniac.lee.shardy.test;
 import com.alibaba.druid.filter.Filter;
 import com.alibaba.druid.filter.stat.StatFilter;
 import com.alibaba.druid.pool.DruidDataSource;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import maniac.lee.shardy.config.ShardResult;
 import maniac.lee.shardy.config.TableConfig;
 import maniac.lee.shardy.config.builder.SlaveConfigBuilder;
 import maniac.lee.shardy.config.builder.TableConfigBuilder;
 import maniac.lee.shardy.config.strategy.BucketArrayShardStrategy;
+import maniac.lee.shardy.datasource.DbShardFactory;
 import maniac.lee.shardy.datasource.DynamicDataSource;
 import maniac.lee.shardy.spring.ShardInterceptorFactoryBean;
-import org.aopalliance.intercept.MethodInterceptor;
-import org.aopalliance.intercept.MethodInvocation;
 import org.apache.ibatis.plugin.Interceptor;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.annotation.MapperScan;
-import org.springframework.aop.aspectj.AspectJExpressionPointcut;
 import org.springframework.aop.support.DefaultPointcutAdvisor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -29,7 +28,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import javax.sql.DataSource;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
 
@@ -56,22 +54,28 @@ public class DalConfig {
                                 .setSlaveColumn("name")
                                 .setSlaveToTableMapping(context -> {
                                     String name = context.getColumnValue().toString();
-                                    if (name.startsWith("db")) {
-                                        return ShardResult.create("User", "user_shard");
-                                    }
                                     String table = context.getTable();
-                                    if (name.startsWith("shard"))
-                                        table += "_0";
-                                    return new ShardResult(table, null);
+                                    return new ShardResult(name.startsWith("shard") ? (table += "_0") : table);
                                 })
                                 .build()))
                 .build();
     }
 
     @Bean
+    public AbstractRoutingDataSource dynamicDataSource(DataSource user, DataSource user_shard) {
+        return DynamicDataSource.instance(user, ImmutableMap.of("user_shard", user_shard));
+    }
+
+    @Bean
+    public DefaultPointcutAdvisor dbShard() {
+        return DbShardFactory.createDbShardInterceptor("execution(* maniac.lee.shardy.test.dal.mapper..*.*(..))");
+    }
+
+    @Bean
     public ShardInterceptorFactoryBean shardInterceptor() {
         return new ShardInterceptorFactoryBean();
     }
+
 
     @Bean
     public SqlSessionFactoryBean sqlSessionFactory(Interceptor shardInterceptor, AbstractRoutingDataSource dynamicDataSource) {
@@ -97,17 +101,6 @@ public class DalConfig {
         return createDataSource(url, username, password);
     }
 
-    @Bean
-    public AbstractRoutingDataSource dynamicDataSource(DataSource user, DataSource user_shard) {
-        DynamicDataSource re = DynamicDataSource.instance("user");
-        re.setDefaultTargetDataSource(user);
-        re.setTargetDataSources(new HashMap() {{
-            put("user", user);
-            put("user_shard", user_shard);
-        }});
-        System.out.println(re);
-        return re;
-    }
 
     DruidDataSource createDataSource(String url, String username, String password) throws SQLException {
         DruidDataSource druidDataSource = new DruidDataSource();
@@ -143,20 +136,5 @@ public class DalConfig {
         return druidDataSource;
     }
 
-    //    @Bean
-    public DefaultPointcutAdvisor programAspect() {
-        DefaultPointcutAdvisor re = new DefaultPointcutAdvisor();
-        AspectJExpressionPointcut aspectJExpressionPointcut = new AspectJExpressionPointcut();
-        //        aspectJExpressionPointcut.setExpression("execution(* org.apache.ibatis.executor.BaseExecutor.*(..))");
-        aspectJExpressionPointcut.setExpression("execution(* psyco.test.dal.mapper..*.*(..))");
-        re.setPointcut(aspectJExpressionPointcut);
 
-        re.setAdvice(new MethodInterceptor() {
-            public Object invoke(MethodInvocation methodInvocation) throws Throwable {
-                System.out.println("fuck!!!!" + methodInvocation.getMethod().getName());
-                return methodInvocation.proceed();
-            }
-        });
-        return re;
-    }
 }

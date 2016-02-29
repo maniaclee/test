@@ -39,6 +39,12 @@ public class MybatisTest {
     }
 
     @Test
+    public void db() {
+        print(daoLayer.findByIdsDbShard(Lists.newArrayList(999900000l), "USER"));
+    }
+
+
+    @Test
     public void testBatch() {
         //        print(daoLayer.findByIds(Lists.newArrayList(10000001l,23l,10000000l),"USER"));
         print(daoLayer.findByIds(Lists.newArrayList(25l, 23l, 10000002l), "USER"));

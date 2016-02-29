@@ -25,6 +25,18 @@
             </foreach>
         </where>
     </select>
+
+    <select id="findByIdsDbShard" resultType="maniac.lee.shardy.test.dal.entity.User">
+        SELECT * from User
+        <where>
+            role= #{role}
+            and
+            id in
+            <foreach item="id" index="index" collection="ids" open="(" separator="," close=")">
+                #{id}
+            </foreach>
+        </where>
+    </select>
     <select id="findByNames" resultType="maniac.lee.shardy.test.dal.entity.User">
         SELECT * from User
         <where>
