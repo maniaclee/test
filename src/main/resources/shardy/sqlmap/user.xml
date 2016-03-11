@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="maniac.lee.shardy.test.dal.mapper.DaoLayer">
+<mapper namespace="maniac.lee.test.shardy.test.dal.mapper.DaoLayer">
     <update id="updateLevelByIds">
         UPDATE   User
         SET   level = #{l}
@@ -14,7 +14,7 @@
         </where>
     </update>
 
-    <select id="findByIds" resultType="maniac.lee.shardy.test.dal.entity.User">
+    <select id="findByIds" resultType="maniac.lee.test.shardy.test.dal.entity.User">
         SELECT * from User
         <where>
             role= #{role}
@@ -26,7 +26,7 @@
         </where>
     </select>
 
-    <select id="findByIdsDbShard" resultType="maniac.lee.shardy.test.dal.entity.User">
+    <select id="findByIdsDbShard" resultType="maniac.lee.test.shardy.test.dal.entity.User">
         SELECT * from User
         <where>
             role= #{role}
@@ -37,7 +37,7 @@
             </foreach>
         </where>
     </select>
-    <select id="findByNames" resultType="maniac.lee.shardy.test.dal.entity.User">
+    <select id="findByNames" resultType="maniac.lee.test.shardy.test.dal.entity.User">
         SELECT * from User
         <where>
             name in

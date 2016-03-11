@@ -1,4 +1,4 @@
-package maniac.lee.shardy.test;
+package maniac.lee.test.shardy.test;
 
 import com.alibaba.druid.filter.Filter;
 import com.alibaba.druid.filter.stat.StatFilter;

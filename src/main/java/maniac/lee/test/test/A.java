@@ -1,4 +1,4 @@
-package maniac.lee.test;
+package maniac.lee.test.test;
 
 import java.io.Serializable;
 

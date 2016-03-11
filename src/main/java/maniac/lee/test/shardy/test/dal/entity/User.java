@@ -1,4 +1,4 @@
-package maniac.lee.shardy.test.dal.entity;
+package maniac.lee.test.shardy.test.dal.entity;
 
 import java.io.Serializable;
 import java.util.Date;

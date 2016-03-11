@@ -1,4 +1,4 @@
-package maniac.lee.shardy.test;
+package maniac.lee.test.shardy.test;
 
 import maniac.lee.shardy.SqlParseException;
 import maniac.lee.shardy.sqlparser.DruidSqlParser;
