@@ -1,4 +1,4 @@
-package maniac.lee.shardy.test;
+package maniac.lee.test.shardy.test;
 
 import com.alibaba.druid.sql.SQLUtils;
 import com.alibaba.druid.sql.ast.SQLStatement;

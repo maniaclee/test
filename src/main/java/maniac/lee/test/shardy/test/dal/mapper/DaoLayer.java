@@ -1,7 +1,7 @@
-package maniac.lee.shardy.test.dal.mapper;
+package maniac.lee.test.shardy.test.dal.mapper;
 
 import maniac.lee.shardy.datasource.DbRouter;
-import maniac.lee.shardy.test.dal.entity.User;
+import maniac.lee.test.shardy.test.dal.entity.User;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;

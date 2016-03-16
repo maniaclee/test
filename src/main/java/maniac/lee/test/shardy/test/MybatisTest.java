@@ -1,8 +1,8 @@
-package maniac.lee.shardy.test;
+package maniac.lee.test.shardy.test;
 
 import com.google.common.collect.Lists;
-import maniac.lee.shardy.test.dal.entity.User;
-import maniac.lee.shardy.test.dal.mapper.DaoLayer;
+import maniac.lee.test.shardy.test.dal.entity.User;
+import maniac.lee.test.shardy.test.dal.mapper.DaoLayer;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
