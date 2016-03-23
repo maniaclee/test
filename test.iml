@@ -69,5 +69,15 @@
     </orderEntry>
     <orderEntry type="library" name="Maven: io.reactivex:rxjava:1.0.12" level="project" />
     <orderEntry type="library" name="Maven: commons-codec:commons-codec:1.10" level="project" />
+    <orderEntry type="library" name="Maven: com.alibaba.otter:canal.client:1.0.12" level="project" />
+    <orderEntry type="library" name="Maven: com.alibaba.otter:canal.protocol:1.0.12" level="project" />
+    <orderEntry type="library" name="Maven: com.alibaba.otter:canal.common:1.0.12" level="project" />
+    <orderEntry type="library" name="Maven: com.github.sgroschupf:zkclient:0.1" level="project" />
+    <orderEntry type="library" name="Maven: commons-io:commons-io:2.4" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework:spring:2.5.6" level="project" />
+    <orderEntry type="library" name="Maven: commons-logging:commons-logging:1.1.1" level="project" />
+    <orderEntry type="library" name="Maven: com.alibaba:fastjson:1.1.26" level="project" />
+    <orderEntry type="library" name="Maven: com.google.protobuf:protobuf-java:2.4.1" level="project" />
+    <orderEntry type="library" name="Maven: commons-lang:commons-lang:2.6" level="project" />
   </component>
 </module>
