@@ -14,7 +14,7 @@ public class SimpleCanalClientExample {
     public static void main(String args[]) {
         // 创建链接
         CanalConnector connector = CanalConnectors.newSingleConnector(new InetSocketAddress(AddressUtils.getHostIp(),
-                11111), "example", "", "");
+                11111), "test", "root", "");
         int batchSize = 1000;
         int emptyCount = 0;
         try {
