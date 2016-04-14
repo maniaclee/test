@@ -16,6 +16,7 @@ import io.netty.handler.codec.http.HttpRequestEncoder;
 import io.netty.handler.codec.http.HttpResponseDecoder;
 import io.netty.handler.codec.http.HttpVersion;
 
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
 
 public class HttpClient {
@@ -43,21 +44,27 @@ public class HttpClient {
 
             URI uri = new URI("http://127.0.0.1:8844");
             String msg = "Are you ok?";
-            DefaultFullHttpRequest request = new DefaultFullHttpRequest(HttpVersion.HTTP_1_1, HttpMethod.GET,
-                    uri.toASCIIString(), Unpooled.wrappedBuffer(msg.getBytes("UTF-8")));
-
-            // 构建http请求
-            request.headers().set(HttpHeaders.Names.HOST, host);
-            request.headers().set(HttpHeaders.Names.CONNECTION, HttpHeaders.Values.KEEP_ALIVE);
-            request.headers().set(HttpHeaders.Names.CONTENT_LENGTH, request.content().readableBytes());
             // 发送http请求
-            f.channel().write(request);
+            f.channel().write(getDefaultFullHttpRequest(host, uri, msg));
+            f.channel().flush();
+            f.channel().write(getDefaultFullHttpRequest(host, uri, msg));
             f.channel().flush();
             f.channel().closeFuture().sync();
         } finally {
             workerGroup.shutdownGracefully();
         }
 
+    }
+
+    private DefaultFullHttpRequest getDefaultFullHttpRequest(String host, URI uri, String msg) throws UnsupportedEncodingException {
+        DefaultFullHttpRequest request = new DefaultFullHttpRequest(HttpVersion.HTTP_1_1, HttpMethod.GET,
+                uri.toASCIIString(), Unpooled.wrappedBuffer(msg.getBytes("UTF-8")));
+
+        // 构建http请求
+        request.headers().set(HttpHeaders.Names.HOST, host);
+        request.headers().set(HttpHeaders.Names.CONNECTION, HttpHeaders.Values.KEEP_ALIVE);
+        request.headers().set(HttpHeaders.Names.CONTENT_LENGTH, request.content().readableBytes());
+        return request;
     }
 
     public static void main(String[] args) throws Exception {

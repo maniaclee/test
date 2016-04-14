@@ -11,7 +11,8 @@ public class HttpClientInboundHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-        if (msg instanceof HttpResponse) 
+        System.out.println(msg.getClass().getName());
+        if (msg instanceof HttpResponse)
         {
             HttpResponse response = (HttpResponse) msg;
             System.out.println("CONTENT_TYPE:" + response.headers().get(HttpHeaders.Names.CONTENT_TYPE));
