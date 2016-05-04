@@ -108,6 +108,11 @@
             <artifactId>netty-all</artifactId>
             <version>4.0.24.Final</version>
         </dependency>
+        <dependency>
+            <groupId>c3p0</groupId>
+            <artifactId>c3p0</artifactId>
+            <version>0.9.1.2</version>
+        </dependency>
     </dependencies>
     <build>
         <pluginManagement>
