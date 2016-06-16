@@ -12,13 +12,15 @@ import org.springframework.data.redis.core.RedisTemplate;
  */
 @Configuration
 @ComponentScan("maniac.lee.test.redis.springDataRedis")
+//@EnableCaching
 public class Config {
 
     @Bean
     public JedisConnectionFactory jedisConnectionFactory() {
         JedisConnectionFactory jedisConnectionFactory = new JedisConnectionFactory();
-        jedisConnectionFactory.setHostName("localhost");
+        jedisConnectionFactory.setHostName("127.0.0.1");
         jedisConnectionFactory.setPort(RedisConfig.port);
+        jedisConnectionFactory.setUsePool(true);
         return jedisConnectionFactory;
     }
 
