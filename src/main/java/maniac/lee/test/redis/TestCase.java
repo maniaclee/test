@@ -807,4 +807,20 @@ public class TestCase {
         jedis.flushAll();
     }
 
+    @Test
+    public void sms(){
+        String key = "15000624790";
+        String v = "323333";
+        Jedis jedis = RedisUtil.getJedis();
+        String setex = jedis.setex(key, 1, v);
+        System.out.println(setex);
+        System.out.println(jedis.get(key));
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        System.out.println(jedis.get(key));
+    }
+
 }
