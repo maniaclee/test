@@ -2,9 +2,9 @@ package maniac.lee.test.redis.springDataRedis;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
-@Service("sessionService")
+@Component
 public class SessionBiz {
 
     @Autowired

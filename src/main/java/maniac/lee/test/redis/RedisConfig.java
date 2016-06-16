@@ -9,4 +9,7 @@ public class RedisConfig {
     public static long maxwait = 1000;
     public static int timeout = 1000;
     public static int retryNum = 3;
+
+
+    public static int port =6379;
 }
