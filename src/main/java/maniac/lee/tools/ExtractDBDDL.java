@@ -11,6 +11,7 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 /**
  * Created by lipeng on 16/7/12.
@@ -20,24 +21,40 @@ public class ExtractDBDDL {
 
     @Test
     public void test() throws IOException {
-        extractSql("ddl");
+        String ddl = "ddl.txt";
+        //        extractFields(ddl);
+//        System.out.println(getFieldNames(ddl).stream().collect(Collectors.joining(",\n")));
+        System.out.println(getJavaFieldNames(ddl).stream().map(s-> String.format("#entity.%s#" , s)).collect(Collectors.joining(",\n")));
     }
 
-    public void extractSql(String file) throws IOException {
-        String s = readString(file);
-        Pattern compile = Pattern.compile("\\s*([^\n]+)\\s*,");
-        Matcher matcher = compile.matcher(s);
-        while (matcher.find()) {
-            String group = matcher.group(1);
-            //            System.out.println("group" + group);
+    public List<String> getFieldNames(String file) throws IOException {
+        return extractFieldLines(file).stream().map(s -> trim(s.split("\\s+")[0])).collect(Collectors.toList());
+    }
+    public List<String> getJavaFieldNames(String file) throws IOException {
+        return extractFieldLines(file).stream().map(s -> camelCase(trim(s.split("\\s+")[0]))).collect(Collectors.toList());
+    }
+
+    public void extractFields(String file) throws IOException {
+        for (String group : extractFieldLines(file)) {
             String[] split = group.split("\\s+");
             String field = trim(split[0]);
-            field = CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, field);
+            field = camelCase(field);
             String type = convertType(split[1]);
             String comment = String.format("/**%s*/", trim(split[split.length - 1]));
             System.out.println(Joiner.on(" ").join(Lists.newArrayList(comment, "\n", "private", type, field, ";")));
         }
+    }
 
+    public String camelCase(String field) {
+        field = CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, field);
+        return field;
+    }
+
+    public List<String> extractFieldLines(String file) throws IOException {
+        List<String> re = Lists.newLinkedList();
+        for (Matcher matcher = Pattern.compile("\\s*([^\n]+)\\s*,").matcher(readString(file)); matcher.find(); )
+            re.add(matcher.group(1));
+        return re;
     }
 
     private String trim(String s) {
