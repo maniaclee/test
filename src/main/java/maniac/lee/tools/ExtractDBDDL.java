@@ -24,9 +24,15 @@ public class ExtractDBDDL {
         String ddl = "ddl.txt";
         //        extractFields(ddl);
 //        System.out.println(getFieldNames(ddl).stream().collect(Collectors.joining(",\n")));
-        System.out.println(getJavaFieldNames(ddl).stream().map(s-> String.format("#entity.%s#" , s)).collect(Collectors.joining(",\n")));
+//        System.out.println(getJavaFieldNames(ddl).stream().map(s-> String.format("#entity.%s#" , s)).collect(Collectors.joining(",\n")));
+        System.out.println(getFieldNamesAs(ddl).stream().collect(Collectors.joining(",\n")));
+
     }
 
+
+    public List<String> getFieldNamesAs(String file) throws IOException {
+        return getFieldNames(file).stream().map(s -> s + " as " + camelCase(s)).collect(Collectors.toList());
+    }
     public List<String> getFieldNames(String file) throws IOException {
         return extractFieldLines(file).stream().map(s -> trim(s.split("\\s+")[0])).collect(Collectors.toList());
     }
