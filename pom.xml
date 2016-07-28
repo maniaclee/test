@@ -7,6 +7,9 @@
     <groupId>maniaclee</groupId>
     <artifactId>test</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <properties>
+        <spring-boot-version>1.2.5.RELEASE</spring-boot-version>
+    </properties>
 
     <dependencies>
 
@@ -39,23 +42,28 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
-            <version>1.2.5.RELEASE</version>
+            <version>${spring-boot-version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-jdbc</artifactId>
-            <version>1.2.5.RELEASE</version>
+            <version>${spring-boot-version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-aop</artifactId>
-            <version>1.2.5.RELEASE</version>
+            <version>${spring-boot-version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
-            <version>1.2.5.RELEASE</version>
+            <version>${spring-boot-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <version>${spring-boot-version}</version>
         </dependency>
 
         <dependency>
@@ -125,11 +133,7 @@
             <artifactId>spring-data-redis</artifactId>
             <version>1.6.2.RELEASE</version>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-            <version>1.2.5.RELEASE</version>
-        </dependency>
+
     </dependencies>
     <build>
         <pluginManagement>
