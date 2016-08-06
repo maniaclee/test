@@ -1,6 +1,9 @@
 package maniac.lee.test.userrpc;
 
+import com.alibaba.fastjson.JSON;
 import com.lvbby.user.api.dto.UserDTO;
+import com.lvbby.user.api.request.UserRegisterRequest;
+import com.lvbby.user.api.response.UserRegisterResponse;
 import com.lvbby.user.api.service.UserService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -31,12 +34,14 @@ public class Consumer {
     UserService userService;
 
     @Test
-    public void esdf(){
+    public void esdf() {
         UserDTO entity = new UserDTO();
-        entity.setName("sdsfsdf");
+        entity.setName("sdsfsdfxxx");
         entity.setAddTime(new Date());
-        long re = userService.add(entity);
-        System.out.println("add : ===> " + re);
+        UserRegisterRequest userRegisterRequest = new UserRegisterRequest();
+        userRegisterRequest.setUserDTO(entity);
+        UserRegisterResponse re = userService.add(userRegisterRequest);
+        System.out.println("add : ===> " + JSON.toJSONString(re));
     }
 
 
@@ -45,12 +50,14 @@ public class Consumer {
         context.start();
 
         UserService userService = (UserService) context.getBean("userService");// 获取远程服务代理
-//        UserService userService = context.getBean(UserService.class);// 获取远程服务代理
+        //        UserService userService = context.getBean(UserService.class);// 获取远程服务代理
         UserDTO entity = new UserDTO();
         entity.setName("sdsfsdf");
         entity.setAddTime(new Date());
-        long re = userService.add(entity);
-        System.out.println("add : ===> " + re);
+        UserRegisterRequest userRegisterRequest = new UserRegisterRequest();
+        userRegisterRequest.setUserDTO(entity);
+        UserRegisterResponse re = userService.add(userRegisterRequest);
+        System.out.println("add : ===> " + JSON.toJSONString(re));
 
     }
 
