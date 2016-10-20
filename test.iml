@@ -19,9 +19,6 @@
     <orderEntry type="library" name="Maven: org.springframework:spring-beans:4.1.6.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-expression:4.1.6.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-jdbc:4.1.6.RELEASE" level="project" />
-    <orderEntry type="module" module-name="bridge-spring" />
-    <orderEntry type="module" module-name="bridge-api" />
-    <orderEntry type="library" name="Maven: com.alibaba:fastjson:1.2.6" level="project" />
     <orderEntry type="library" name="Maven: junit:junit:4.12" level="project" />
     <orderEntry type="library" name="Maven: org.hamcrest:hamcrest-core:1.3" level="project" />
     <orderEntry type="library" name="Maven: com.google.guava:guava:18.0" level="project" />
@@ -93,6 +90,7 @@
     <orderEntry type="library" name="Maven: com.alibaba.otter:canal.common:1.0.12" level="project" />
     <orderEntry type="library" name="Maven: com.github.sgroschupf:zkclient:0.1" level="project" />
     <orderEntry type="library" name="Maven: commons-io:commons-io:2.4" level="project" />
+    <orderEntry type="library" name="Maven: com.alibaba:fastjson:1.1.26" level="project" />
     <orderEntry type="library" name="Maven: com.google.protobuf:protobuf-java:2.4.1" level="project" />
     <orderEntry type="library" name="Maven: commons-lang:commons-lang:2.6" level="project" />
     <orderEntry type="library" name="Maven: joda-time:joda-time:2.8.1" level="project" />
