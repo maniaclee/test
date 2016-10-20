@@ -12,7 +12,7 @@ public class UserOperationsService {
     private RedisTemplate redisTemplate;
 
     public void addUser(User user) {
-        // TODO Auto-generated method stub
+        // TODO Auto-generated value stub
         /*
          * boolean result = redisTemplate.execute(new RedisCallback<Boolean>() {
          * public Boolean doInRedis(RedisConnection redisConnection) throws

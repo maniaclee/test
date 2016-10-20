@@ -160,7 +160,7 @@ public class HttpRequestDecoder extends MessageDecoderAdapter {
 				map.put(tokens[0], new String[] { tokens[1] });
 			}
 
-			// If method 'POST' then read Content-Length worth of data
+			// If value 'POST' then read Content-Length worth of data
 			if (url[0].equalsIgnoreCase("POST")) {
 				int len = Integer.parseInt(map.get("Content-Length")[0]);
 				char[] buf = new char[len];
