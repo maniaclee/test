@@ -43,7 +43,7 @@ public class JavaConverterBuilder {
 
     @Test
     public void tst() throws Exception {
-        String s = IOUtils.toString(new FileInputStream("/Users/psyco/workspace/dp/hui-order/hui-order-service/src/main/java/com/dianping/hui/order/shard/entity/HuiOrderDetailEntity.java"));
+        String s = IOUtils.toString(new FileInputStream("/Users/psyco/workspace/dp/ssp-es-search-service/ssp-es-search-api/src/main/java/com/dianping/ssp/es/search/api/dto/EsArticleRequest.java"));
         //        System.out.println(extractFields(s));
         System.out.println(convert(s));
     }
