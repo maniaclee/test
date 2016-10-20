@@ -154,11 +154,6 @@
             <version>2.5.3</version>
         </dependency>
         <dependency>
-            <groupId>com.lvbby</groupId>
-            <artifactId>bridge-api</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-        <dependency>
             <groupId>org.elasticsearch</groupId>
             <artifactId>elasticsearch</artifactId>
             <version>2.4.0</version>
