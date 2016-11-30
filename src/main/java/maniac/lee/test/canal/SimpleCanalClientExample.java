@@ -14,7 +14,7 @@ public class SimpleCanalClientExample {
     public static void main(String args[]) {
         // 创建链接
         CanalConnector connector = CanalConnectors.newSingleConnector(new InetSocketAddress(AddressUtils.getHostIp(),
-                11111), "lee", "root", "");
+                11111), "lee", "canal", "canal");
         int batchSize = 1000;
         int emptyCount = 0;
         try {
@@ -60,14 +60,14 @@ public class SimpleCanalClientExample {
                 rowChage = RowChange.parseFrom(entry.getStoreValue());
             } catch (Exception e) {
                 throw new RuntimeException("ERROR ## parser of eromanga-event has an error , data:" + entry.toString(),
-                                           e);
+                        e);
             }
 
             EventType eventType = rowChage.getEventType();
             System.out.println(String.format("================> binlog[%s:%s] , name[%s,%s] , eventType : %s",
-                                             entry.getHeader().getLogfileName(), entry.getHeader().getLogfileOffset(),
-                                             entry.getHeader().getSchemaName(), entry.getHeader().getTableName(),
-                                             eventType));
+                    entry.getHeader().getLogfileName(), entry.getHeader().getLogfileOffset(),
+                    entry.getHeader().getSchemaName(), entry.getHeader().getTableName(),
+                    eventType));
 
             for (RowData rowData : rowChage.getRowDatasList()) {
                 if (eventType == EventType.DELETE) {
