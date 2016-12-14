@@ -1,6 +1,5 @@
 package maniac.lee.test.html;
 
-import com.wuman.jreadability.Readability;
 import de.jetwick.snacktory.HtmlFetcher;
 import de.jetwick.snacktory.JResult;
 import org.jsoup.Jsoup;
@@ -36,7 +35,15 @@ public class All {
     }
 
     public void Readability() throws IOException {
-        Readability readability = new Readability(getDoc());  // URL
+        Readability readability = new Readability(getDoc()) {
+            @Override
+            protected void dbg(String msg) {
+            }
+
+            @Override
+            protected void dbg(String msg, Throwable t) {
+            }
+        };
         readability.init();
         String cleanHtml = readability.outerHtml();
         System.out.println(cleanHtml);
