@@ -26,7 +26,11 @@ public class MavenCleaner {
     }
 
     public void removeDir(File file) {
-        file.delete();
+        try {
+            FileUtils.deleteDirectory(file);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private Optional<File> getTarget(File file) {
@@ -51,11 +55,7 @@ public class MavenCleaner {
     public void dsf() {
         run(new File("/Users/psyco/workspace/"), file -> {
             System.out.println(file.getAbsolutePath());
-            try {
-                FileUtils.deleteDirectory(file);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            removeDir(file);
         });
     }
 }
